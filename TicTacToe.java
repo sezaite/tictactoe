@@ -25,7 +25,7 @@ public class TicTacToe {
                 zaidimoLenta[i][j] = " - ";
             }
         }
-        System.out.println("Nupieseme lenta " + y + " x " + y + " dydzio. Tu busi iksas, ok? Pradekime zaidima");
+        System.out.println("Nupieseme lenta " + y + " x " + y + " dydzio. Tu busi iksas, ok? Pradek zaidima");
         printLenta(zaidimoLenta);
         ejimai(zaidimoLenta);
     }
@@ -45,7 +45,7 @@ public class TicTacToe {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Ivesk  s k a i c i u  nuuu");
                     }
-                } while ( x < 0 || x > zaidimoLenta.length);
+                } while (x < 0 || x > zaidimoLenta.length);
 
                 do {
                     Scanner yPrompt = new Scanner(System.in);
@@ -57,12 +57,16 @@ public class TicTacToe {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Ivesk  s k a i c i u  nuuu");
                     }
-                } while ( y < 0 || y > zaidimoLenta.length);
+                } while (y < 0 || y > zaidimoLenta.length);
 
             } while (!(arLaisvasLangelis(x, y, zaidimoLenta)));
             zaidimoLenta[y][x] = " X ";
             printLenta(zaidimoLenta);
-            zaidimoLenta = kompiuterioEile(zaidimoLenta);
+            if (!arNiekasNelaimejo(zaidimoLenta)) {
+                zaidimoLenta = kompiuterioEile(zaidimoLenta);
+            } else {
+                break;
+            }
 
         } while (!arNiekasNelaimejo(zaidimoLenta));
 
@@ -83,9 +87,6 @@ public class TicTacToe {
     }
 
     public static String[][] kompiuterioEile(String[][] zaidimoLenta) {
-        if (arUzsipildeLenta(zaidimoLenta)) {
-            return zaidimoLenta;
-        }
         System.out.println("Kompiuterio ejimas: ");
         int x = 0;
         int y = 0;
@@ -146,6 +147,7 @@ public class TicTacToe {
         for (int i = 0; i < zaidimoLenta.length; i++) {
             for (int j = 0; j < zaidimoLenta[i].length; j++) {
                 if (zaidimoLenta[i][j].equals(" - ")) {
+                    System.out.println("Laimetoju nematau. Vaziuojam toliau");
                     return false;
                 }
             }
