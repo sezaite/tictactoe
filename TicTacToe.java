@@ -37,7 +37,7 @@ public class TicTacToe {
             do {
                 do {
                     Scanner xPrompt = new Scanner(System.in);
-                    System.out.println("Pasirink X koordinate. Ivesk skaiciu, ne didesni uz " + zaidimoLenta.length);
+                    System.out.println("Pasirink X koordinate. Ivesk sveikaji skaiciu, ne didesni uz " + zaidimoLenta.length);
                     String s = xPrompt.nextLine();
                     try {
                         int xKoord = Integer.parseInt(s);
@@ -45,11 +45,11 @@ public class TicTacToe {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Ivesk  s k a i c i u  nuuu");
                     }
-                } while (!arTinkamosKoordinates(zaidimoLenta.length, y));
+                } while ( x < 0 || x > zaidimoLenta.length);
 
                 do {
                     Scanner yPrompt = new Scanner(System.in);
-                    System.out.println("Pasirink Y koordinate. Ivesk skaiciu, ne didesni uz " + zaidimoLenta.length);
+                    System.out.println("Pasirink Y koordinate. Ivesk sveikaji skaiciu, ne didesni uz " + zaidimoLenta.length);
                     String s = yPrompt.nextLine();
                     try {
                         int yKoord = Integer.parseInt(s);
@@ -57,10 +57,10 @@ public class TicTacToe {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Ivesk  s k a i c i u  nuuu");
                     }
-                } while (!arTinkamosKoordinates(zaidimoLenta.length, y));
+                } while ( y < 0 || y > zaidimoLenta.length);
 
             } while (!(arLaisvasLangelis(x, y, zaidimoLenta)));
-            zaidimoLenta[y][x] = " X ";
+            zaidimoLenta[x][y] = " X ";
             printLenta(zaidimoLenta);
             zaidimoLenta = kompiuterioEile(zaidimoLenta);
 
@@ -127,12 +127,12 @@ public class TicTacToe {
     }
 
     public static void printLenta(String[][] zaidimoLenta) {
-        System.out.print("  x  ");
+        System.out.print("  y  ");
         for (int i = 0; i < zaidimoLenta.length; i++) {
             System.out.print(i + 1 + "  ");
         }
         System.out.println();
-        System.out.println("y");
+        System.out.println("x");
         for (int i = 0; i < zaidimoLenta.length; i++) {
             System.out.print(i + 1 + "   ");
             for (int j = 0; j < zaidimoLenta[i].length; j++) {
@@ -155,12 +155,8 @@ public class TicTacToe {
         return true;
     }
 
-    public static boolean arTinkamosKoordinates(int dydis, int koord) {
-        return koord < 0 || koord >= dydis;
-    }
-
     public static boolean arLaisvasLangelis(int x, int y, String[][] zaidimoLenta) {
-        if (zaidimoLenta[x][y].equals(" - ")) {
+        if (!zaidimoLenta[x][y].equals(" - ")) {
             System.out.println("ups, sita pozicija jau uzimta");
             return false;
         }
