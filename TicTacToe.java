@@ -18,13 +18,14 @@ public class TicTacToe {
             }
         } while (y < 3 || y > 9);
 
+        //sukuriama ivesto dydzio kvardarine lenta ir vietoj reiksmiu irasomi minusai
         String[][] zaidimoLenta = new String[y][y];
         for (int i = 0; i < zaidimoLenta.length; i++) {
             for (int j = 0; j < zaidimoLenta[i].length; j++) {
                 zaidimoLenta[i][j] = " - ";
             }
         }
-        System.out.println("Nupieseme lenta " + y + " x " + y + " dydzio. Tu busi iksas, ok? Pradekime zaidima xD");
+        System.out.println("Nupieseme lenta " + y + " x " + y + " dydzio. Tu busi iksas, ok? Pradekime zaidima");
         printLenta(zaidimoLenta);
         ejimai(zaidimoLenta);
     }
@@ -44,7 +45,7 @@ public class TicTacToe {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Ivesk  s k a i c i u  nuuu");
                     }
-                } while (x < 0 || x >= zaidimoLenta.length);
+                } while (!arTinkamosKoordinates(zaidimoLenta.length, y));
 
                 do {
                     Scanner yPrompt = new Scanner(System.in);
@@ -56,11 +57,10 @@ public class TicTacToe {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Ivesk  s k a i c i u  nuuu");
                     }
-                } while (y < 0 || y >= zaidimoLenta.length);
+                } while (!arTinkamosKoordinates(zaidimoLenta.length, y));
 
-            } while (!zaidimoLenta[x][y].equals(" - "));
-
-            zaidimoLenta[x][y] = " X ";
+            } while (!(arLaisvasLangelis(x, y, zaidimoLenta)));
+            zaidimoLenta[y][x] = " X ";
             printLenta(zaidimoLenta);
             zaidimoLenta = kompiuterioEile(zaidimoLenta);
 
@@ -76,22 +76,16 @@ public class TicTacToe {
         } else if (rezultatai.equals(" O ")) {
             System.out.println("Laimejo kompas");
             return true;
-        } else {
-            for (int i = 0; i < zaidimoLenta.length; i++) {
-                for (int j = 0; j < zaidimoLenta[i].length; j++) {
-                    if (zaidimoLenta[i][j].equals(" - ")) {
-                        System.out.println("Teskim zaidima");
-                        return false;
-                    }
-                    System.out.println("Lenta uzsipilde. Lygiosios");
-                    return true;
-                }
-            }
+        } else if (arUzsipildeLenta(zaidimoLenta)) {
+            return true;
         }
         return false;
     }
 
     public static String[][] kompiuterioEile(String[][] zaidimoLenta) {
+        if (arUzsipildeLenta(zaidimoLenta)) {
+            return zaidimoLenta;
+        }
         System.out.println("Kompiuterio ejimas: ");
         int x = 0;
         int y = 0;
@@ -105,36 +99,72 @@ public class TicTacToe {
     }
 
     public static String ziurimRezultatus(String[][] zaidimoLenta) {
-        for (int i = 0; i < zaidimoLenta.length - 1; i++) {
+        for (int i = 0; i < zaidimoLenta.length; i++) {
             for (int j = 0; j < zaidimoLenta[i].length; j++) {
-                if (!zaidimoLenta[i][j].equals("")) {
-                    //kaimynas toje pacioje eileje, is desines, visiems, tik ne dviems paskutiniams J
-                    if (j < zaidimoLenta[i].length - 3 && zaidimoLenta[i][j + 1].equals(zaidimoLenta[i][j])
+                if (!(zaidimoLenta[i][j].equals(" - "))) {
+                    //netikrinti horizontaliuju pergaliu jei tikrinamasis per arti desiniojo krasto
+                    if (j < zaidimoLenta[i].length - 2 && zaidimoLenta[i][j + 1].equals(zaidimoLenta[i][j])
                             && zaidimoLenta[i][j + 2].equals(zaidimoLenta[i][j])) {
+
+                        return zaidimoLenta[i][j];
+                        //netikrinti istrizuju i desine, jei tikrinamasis per arti desiniojo krasto
+                    } else if (j < zaidimoLenta[i].length - 2 && i < zaidimoLenta[i].length - 2 && zaidimoLenta[i + 1][j + 1].equals(zaidimoLenta[i][j]) && zaidimoLenta[i + 1 + 1][j + 1 + 1].equals(zaidimoLenta[i][j])) {
+
+                        return zaidimoLenta[i][j];
+                        //netikrinti vertikaliuju kai tikrinamasis per arti apacios
+                    } else if (i < zaidimoLenta[i].length - 2 && zaidimoLenta[i + 1][j].equals(zaidimoLenta[i][j]) && zaidimoLenta[i + 1 + 1][j].equals(zaidimoLenta[i][j])) {
+
+                        return zaidimoLenta[i][j];
+                    } //netikrinti istrizu i kaire kai tikrinamasis per arti kairiojo krasto
+                    else if (j > 1 && i < zaidimoLenta.length - 2 && zaidimoLenta[i + 1][j - 1].equals(zaidimoLenta[i][j]) && zaidimoLenta[i + 1 + 1][j - 1 - 1].equals(zaidimoLenta[i][j])) {
+
                         return zaidimoLenta[i][j];
                     }
-                } else if (j < zaidimoLenta[i].length - 3 && zaidimoLenta[i + 1][j + 1].equals(zaidimoLenta[i][j]) && zaidimoLenta[i + 1 + 1][j + 1 + 1].equals(zaidimoLenta[i][j])) {
-
-                    return zaidimoLenta[i][j];
-                } else if (i < zaidimoLenta[i].length - 3 && zaidimoLenta[i + 1][j].equals(zaidimoLenta[i][j]) && zaidimoLenta[i + 1 + 1][j].equals(zaidimoLenta[i][j])) {
-
-                    return zaidimoLenta[i][j];
-                } //pirmieji elementai mes klaida:
-                else if (j > 1 && zaidimoLenta[i + 1][j - 1].equals(zaidimoLenta[i][j]) && zaidimoLenta[i + 1 + 1][j - 1 - 1].equals(zaidimoLenta[i][j])) {
-
-                    return zaidimoLenta[i][j];
                 }
             }
         }
-        return "";
+        return " - ";
     }
 
     public static void printLenta(String[][] zaidimoLenta) {
+        System.out.print("  x  ");
         for (int i = 0; i < zaidimoLenta.length; i++) {
+            System.out.print(i + 1 + "  ");
+        }
+        System.out.println();
+        System.out.println("y");
+        for (int i = 0; i < zaidimoLenta.length; i++) {
+            System.out.print(i + 1 + "   ");
             for (int j = 0; j < zaidimoLenta[i].length; j++) {
                 System.out.print(zaidimoLenta[i][j]);
             }
             System.out.println();
         }
     }
+
+    public static boolean arUzsipildeLenta(String[][] zaidimoLenta) {
+        for (int i = 0; i < zaidimoLenta.length; i++) {
+            for (int j = 0; j < zaidimoLenta[i].length; j++) {
+                if (zaidimoLenta[i][j].equals(" - ")) {
+                    System.out.println("Laimetoju nematau. Teskim zaidima");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Lenta uzsipilde. Lygiosios");
+        return true;
+    }
+
+    public static boolean arTinkamosKoordinates(int dydis, int koord) {
+        return koord < 0 || koord >= dydis;
+    }
+
+    public static boolean arLaisvasLangelis(int x, int y, String[][] zaidimoLenta) {
+        if (zaidimoLenta[x][y].equals(" - ")) {
+            System.out.println("ups, sita pozicija jau uzimta");
+            return false;
+        }
+        return true;
+    }
+
 }
