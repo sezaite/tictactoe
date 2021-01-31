@@ -60,7 +60,7 @@ public class TicTacToe {
                 } while ( y < 0 || y > zaidimoLenta.length);
 
             } while (!(arLaisvasLangelis(x, y, zaidimoLenta)));
-            zaidimoLenta[x][y] = " X ";
+            zaidimoLenta[y][x] = " X ";
             printLenta(zaidimoLenta);
             zaidimoLenta = kompiuterioEile(zaidimoLenta);
 
@@ -92,8 +92,8 @@ public class TicTacToe {
         do {
             x = (int) (Math.random() * zaidimoLenta.length);
             y = (int) (Math.random() * zaidimoLenta.length);
-        } while (!zaidimoLenta[x][y].equals(" - "));
-        zaidimoLenta[x][y] = " O ";
+        } while (!zaidimoLenta[y][x].equals(" - "));
+        zaidimoLenta[y][x] = " O ";
         printLenta(zaidimoLenta);
         return zaidimoLenta;
     }
@@ -127,12 +127,12 @@ public class TicTacToe {
     }
 
     public static void printLenta(String[][] zaidimoLenta) {
-        System.out.print("  y  ");
+        System.out.print("  x  ");
         for (int i = 0; i < zaidimoLenta.length; i++) {
             System.out.print(i + 1 + "  ");
         }
         System.out.println();
-        System.out.println("x");
+        System.out.println("y");
         for (int i = 0; i < zaidimoLenta.length; i++) {
             System.out.print(i + 1 + "   ");
             for (int j = 0; j < zaidimoLenta[i].length; j++) {
@@ -146,7 +146,6 @@ public class TicTacToe {
         for (int i = 0; i < zaidimoLenta.length; i++) {
             for (int j = 0; j < zaidimoLenta[i].length; j++) {
                 if (zaidimoLenta[i][j].equals(" - ")) {
-                    System.out.println("Laimetoju nematau. Teskim zaidima");
                     return false;
                 }
             }
@@ -156,7 +155,7 @@ public class TicTacToe {
     }
 
     public static boolean arLaisvasLangelis(int x, int y, String[][] zaidimoLenta) {
-        if (!zaidimoLenta[x][y].equals(" - ")) {
+        if (!zaidimoLenta[y][x].equals(" - ")) {
             System.out.println("ups, sita pozicija jau uzimta");
             return false;
         }
